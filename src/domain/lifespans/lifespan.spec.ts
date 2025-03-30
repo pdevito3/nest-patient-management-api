@@ -1,5 +1,5 @@
-import { Lifespan } from './lifespan';
 import { ValidationException } from '../../exceptions/validation-exception';
+import { Lifespan } from './lifespan';
 
 describe('Lifespan', () => {
   describe('can_get_lifespan_from_date_of_birth', () => {
@@ -7,35 +7,38 @@ describe('Lifespan', () => {
       [-18, 0],
       [-2250, 6],
       [-364, 0],
-      [-0, 0]
-    ])('should calculate correct age for date %i days old', (daysOld, expectedAge) => {
-      // Arrange
-      const now = new Date();
-      const dob = new Date(now);
-      dob.setDate(dob.getDate() + daysOld);
-      
-      // Act
-      const lifespan = new Lifespan(null, dob);
-      
-      // Assert
-      expect(lifespan.dateOfBirth).toEqual(dob);
-      expect(lifespan.knownAge).toBeNull();
-      expect(lifespan.age).toBe(expectedAge);
-      
-      const ageInDays = lifespan.getAgeInDays();
-      expect(ageInDays).toBe(daysOld * -1);
-    });
+      [-0, 0],
+    ])(
+      'should calculate correct age for date %i days old',
+      (daysOld, expectedAge) => {
+        // Arrange
+        const now = new Date();
+        const dob = new Date(now);
+        dob.setDate(dob.getDate() + daysOld);
+
+        // Act
+        const lifespan = new Lifespan(null, dob);
+
+        // Assert
+        expect(lifespan.dateOfBirth).toEqual(dob);
+        expect(lifespan.knownAge).toBeNull();
+        expect(lifespan.age).toBe(expectedAge);
+
+        const ageInDays = lifespan.getAgeInDays();
+        expect(ageInDays).toBe(daysOld * -1);
+      },
+    );
   });
 
   describe('can_get_lifespan_from_age', () => {
     it.each([
       [0, 0],
       [6, 6],
-      [1, 1]
+      [1, 1],
     ])('should set correct age for known age %i', (inputAge, expectedAge) => {
       // Arrange & Act
       const lifespan = new Lifespan(inputAge);
-      
+
       // Assert
       expect(lifespan.knownAge).toBe(expectedAge);
       expect(lifespan.dateOfBirth).toBeNull();
@@ -48,14 +51,14 @@ describe('Lifespan', () => {
       // Arrange
       const validYearsOld = 30;
       const invalidYearsOld = 40;
-      
+
       const now = new Date();
       const dob = new Date(now);
       dob.setFullYear(dob.getFullYear() - validYearsOld);
-      
+
       // Act
       const lifespan = new Lifespan(invalidYearsOld, dob);
-      
+
       // Assert
       expect(lifespan.dateOfBirth).toEqual(dob);
       expect(lifespan.age).toBe(validYearsOld);
@@ -68,14 +71,16 @@ describe('Lifespan', () => {
       // Arrange
       const futureDob = new Date();
       futureDob.setDate(futureDob.getDate() + 1);
-      
+
       // Act & Assert
       expect(() => new Lifespan(null, futureDob)).toThrow(ValidationException);
       try {
         new Lifespan(null, futureDob);
       } catch (error) {
         expect(error.name).toBe('ValidationException');
-        expect(error.errors['Lifespan']).toContain('Date of birth must be in the past');
+        expect(error.errors['Lifespan']).toContain(
+          'Date of birth must be in the past',
+        );
       }
     });
 
@@ -86,7 +91,9 @@ describe('Lifespan', () => {
         new Lifespan(-1);
       } catch (error) {
         expect(error.name).toBe('ValidationException');
-        expect(error.errors['Lifespan']).toContain('Age cannot be less than zero years.');
+        expect(error.errors['Lifespan']).toContain(
+          'Age cannot be less than zero years.',
+        );
       }
     });
 
@@ -97,7 +104,9 @@ describe('Lifespan', () => {
         new Lifespan(121);
       } catch (error) {
         expect(error.name).toBe('ValidationException');
-        expect(error.errors['Lifespan']).toContain('Age cannot be more than 120 years.');
+        expect(error.errors['Lifespan']).toContain(
+          'Age cannot be more than 120 years.',
+        );
       }
     });
   });
@@ -115,20 +124,23 @@ describe('Lifespan', () => {
       [18, 'Adult'],
       [64, 'Adult'],
       [65, 'Senior'],
-      [90, 'Senior']
-    ])('should return correct life stage for age %s', (age, expectedLifeStage) => {
-      // Arrange
-      let lifespan: Lifespan;
-      
-      if (age === null) {
-        lifespan = new Lifespan();
-      } else {
-        lifespan = new Lifespan(age);
-      }
-      
-      // Act & Assert
-      expect(lifespan.getLifeStage()).toBe(expectedLifeStage);
-    });
+      [90, 'Senior'],
+    ])(
+      'should return correct life stage for age %s',
+      (age, expectedLifeStage) => {
+        // Arrange
+        let lifespan: Lifespan;
+
+        if (age === null) {
+          lifespan = new Lifespan();
+        } else {
+          lifespan = new Lifespan(age);
+        }
+
+        // Act & Assert
+        expect(lifespan.getLifeStage()).toBe(expectedLifeStage);
+      },
+    );
   });
 
   describe('phi_friendly_string_tests', () => {
@@ -138,20 +150,23 @@ describe('Lifespan', () => {
       [1, '1 years'],
       [89, '89 years'],
       [90, '> 89 years'],
-      [120, '> 89 years']
-    ])('should return correct PHI-friendly string for age %s', (age, expectedString) => {
-      // Arrange
-      let lifespan: Lifespan;
-      
-      if (age === null) {
-        lifespan = new Lifespan();
-      } else {
-        lifespan = new Lifespan(age);
-      }
-      
-      // Act & Assert
-      expect(lifespan.getPhiFriendlyString()).toBe(expectedString);
-    });
+      [120, '> 89 years'],
+    ])(
+      'should return correct PHI-friendly string for age %s',
+      (age, expectedString) => {
+        // Arrange
+        let lifespan: Lifespan;
+
+        if (age === null) {
+          lifespan = new Lifespan();
+        } else {
+          lifespan = new Lifespan(age);
+        }
+
+        // Act & Assert
+        expect(lifespan.getPhiFriendlyString()).toBe(expectedString);
+      },
+    );
   });
 
   describe('static_factory_methods', () => {
@@ -159,7 +174,7 @@ describe('Lifespan', () => {
       // Arrange & Act
       const age = 25;
       const lifespan = Lifespan.fromKnownAge(age);
-      
+
       // Assert
       expect(lifespan.knownAge).toBe(age);
       expect(lifespan.dateOfBirth).toBeNull();
@@ -168,10 +183,10 @@ describe('Lifespan', () => {
     it('should create lifespan from date of birth using static method', () => {
       // Arrange
       const dob = new Date(2000, 0, 1);
-      
+
       // Act
       const lifespan = Lifespan.fromDateOfBirth(dob);
-      
+
       // Assert
       expect(lifespan.dateOfBirth).toEqual(dob);
       expect(lifespan.knownAge).toBeNull();
@@ -184,16 +199,18 @@ describe('Lifespan', () => {
       const dob = new Date(2000, 0, 1);
       const lifespan = new Lifespan(null, dob);
       const expectedAge = lifespan.age;
-      
+
       // Act & Assert
-      expect(lifespan.toString()).toBe(`DOB: ${dob.toISOString().split('T')[0]}, Age: ${expectedAge} years`);
+      expect(lifespan.toString()).toBe(
+        `DOB: ${dob.toISOString().split('T')[0]}, Age: ${expectedAge} years`,
+      );
     });
 
     it('should return correct string representation with known age', () => {
       // Arrange
       const age = 25;
       const lifespan = new Lifespan(age);
-      
+
       // Act & Assert
       expect(lifespan.toString()).toBe(`Age: ${age} years`);
     });
@@ -201,7 +218,7 @@ describe('Lifespan', () => {
     it('should return unknown lifespan when no age or dob is provided', () => {
       // Arrange
       const lifespan = new Lifespan();
-      
+
       // Act & Assert
       expect(lifespan.toString()).toBe('Unknown lifespan');
     });

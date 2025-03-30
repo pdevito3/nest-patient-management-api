@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
 import { PatientForCreation, PatientForUpdate } from './models';
 import { Patient } from './patient';
-import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class PatientRepository {
@@ -9,24 +9,24 @@ export class PatientRepository {
 
   async findAll(): Promise<Patient[]> {
     const patients = await this.prisma.patient.findMany();
-    return patients.map(patientData => this.mapToDomain(patientData));
+    return patients.map((patientData) => this.mapToDomain(patientData));
   }
 
   async findById(id: string): Promise<Patient | undefined> {
     const patient = await this.prisma.patient.findUnique({
       where: { id },
     });
-    
+
     if (!patient) {
       return undefined;
     }
-    
+
     return this.mapToDomain(patient);
   }
 
   async create(patientData: PatientForCreation): Promise<Patient> {
     const domainPatient = Patient.create(patientData);
-    
+
     await this.prisma.patient.create({
       data: {
         id: domainPatient.id,
@@ -37,7 +37,7 @@ export class PatientRepository {
         dateOfBirth: domainPatient.lifespan.dateOfBirth,
       },
     });
-    
+
     return domainPatient;
   }
 
@@ -52,7 +52,7 @@ export class PatientRepository {
     }
 
     const updatedDomainPatient = existingPatient.update(patientData);
-    
+
     await this.prisma.patient.update({
       where: { id },
       data: {
@@ -63,7 +63,7 @@ export class PatientRepository {
         dateOfBirth: updatedDomainPatient.lifespan.dateOfBirth,
       },
     });
-    
+
     return updatedDomainPatient;
   }
 
@@ -77,7 +77,7 @@ export class PatientRepository {
       return false;
     }
   }
-  
+
   private mapToDomain(patientData: any): Patient {
     return Patient.create({
       firstName: patientData.firstName,

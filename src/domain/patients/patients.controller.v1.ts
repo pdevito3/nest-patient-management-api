@@ -19,7 +19,7 @@ import { UpdatePatientCommand } from './features/update-patient.handler';
 
 @Controller({
   path: 'patients',
-  version: '1'
+  version: '1',
 })
 export class PatientsController {
   constructor(
