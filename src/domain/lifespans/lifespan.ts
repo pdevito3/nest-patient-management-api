@@ -1,5 +1,5 @@
-import { ValueObject } from 'src/domain/value-object';
-import { ValidationException } from 'src/exceptions/validation-exception';
+import { ValueObject } from '../../domain/value-object';
+import { ValidationException } from '../../exceptions/validation-exception';
 
 /**
  * Represents a person's lifespan, either by known age or date of birth
