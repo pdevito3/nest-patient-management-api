@@ -15,4 +15,12 @@ export abstract class BaseEntity {
   protected set id(value: string) {
     this._id = value;
   }
+  
+  /**
+   * Sets the entity ID - use with caution, primarily for ORM mapping
+   * @param id The ID to set
+   */
+  public setId(id: string): void {
+    this._id = id;
+  }
 }

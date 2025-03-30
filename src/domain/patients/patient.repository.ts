@@ -79,12 +79,18 @@ export class PatientRepository {
   }
 
   private mapToDomain(patientData: any): Patient {
-    return Patient.create({
+    // Create a new patient using Patient.create
+    const patient = Patient.create({
       firstName: patientData.firstName,
       lastName: patientData.lastName,
       sex: patientData.sex,
       knownAge: patientData.knownAge,
       dateOfBirth: patientData.dateOfBirth,
     });
+    
+    // Important: Set the ID from the database to preserve it
+    patient.setId(patientData.id);
+    
+    return patient;
   }
 }

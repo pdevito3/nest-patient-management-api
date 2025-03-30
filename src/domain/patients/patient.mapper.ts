@@ -48,4 +48,20 @@ export class PatientMapper {
     const model = this.mapToUpdateModel(dto);
     return patient.update(model);
   }
+
+  /**
+   * Maps a domain Patient model to a persistence model for database storage
+   * @param patient The domain Patient model
+   * @returns The persistence model for database storage
+   */
+  mapToPersistence(patient: Patient): any {
+    return {
+      id: patient.id,
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      sex: patient.sex.Value,
+      knownAge: patient.lifespan.knownAge,
+      dateOfBirth: patient.lifespan.dateOfBirth,
+    };
+  }
 }
