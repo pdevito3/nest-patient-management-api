@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { PatientMapper } from './patient.mapper';
 import { PatientRepository } from './patient.repository';
-import { PatientsController } from './patients.controller';
+import { PatientsController } from './patients.controller.v1';
 
 import { CreatePatientHandler } from './features/create-patient.handler';
 import { DeletePatientHandler } from './features/delete-patient.handler';

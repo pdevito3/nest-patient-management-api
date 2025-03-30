@@ -17,7 +17,10 @@ import { GetAllPatientsQuery } from './features/get-all-patients.handler';
 import { GetPatientByIdQuery } from './features/get-patient-by-id.handler';
 import { UpdatePatientCommand } from './features/update-patient.handler';
 
-@Controller('patients')
+@Controller({
+  path: 'patients',
+  version: '1'
+})
 export class PatientsController {
   constructor(
     private readonly commandBus: CommandBus,
