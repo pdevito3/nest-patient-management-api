@@ -1,4 +1,4 @@
-import { ValidationException } from '../../exceptions/validation-exception';
+import { ValidationException } from '../../common/exceptions/validation-exception';
 import { Lifespan } from './lifespan';
 
 describe('Lifespan', () => {
