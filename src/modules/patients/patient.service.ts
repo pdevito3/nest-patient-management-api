@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Patient as PrismaPatient } from '@prisma/client';
-import { SexService } from 'src/modules/sexes/sex.service';
-import { LifespanService } from 'src/modules/lifespans/lifespan.service';
+import { SexService } from '../sexes/sex.service';
+import { LifespanService } from '../lifespans/lifespan.service';
 import { PatientForCreation, PatientForUpdate } from './models';
 
 @Injectable()
