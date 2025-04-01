@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
-import { PrismaModule } from '../../prisma/prisma.module';
+import { PrismaModule } from '../prisma/prisma.module';
 import { PatientMapper } from './patient.mapper';
-import { PatientRepository } from './patient.repository';
 import { PatientsController } from './patients.controller.v1';
+import { PatientService } from './patient.service';
+import { SexService } from '../sexes/sex.service';
+import { LifespanService } from '../lifespans/lifespan.service';
 
 import { CreatePatientHandler } from './features/create-patient.handler';
 import { DeletePatientHandler } from './features/delete-patient.handler';
@@ -22,7 +24,13 @@ const CommandHandlers = [
 @Module({
   imports: [CqrsModule, PrismaModule],
   controllers: [PatientsController],
-  providers: [PatientRepository, PatientMapper, ...CommandHandlers],
-  exports: [PatientRepository, PatientMapper],
+  providers: [
+    PatientMapper, 
+    PatientService,
+    SexService,
+    LifespanService,
+    ...CommandHandlers
+  ],
+  exports: [PatientMapper, PatientService],
 })
 export class PatientsModule {}

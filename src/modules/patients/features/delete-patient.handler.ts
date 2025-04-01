@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { PatientRepository } from '../patient.repository';
+import { PrismaService } from '../../prisma/prisma.service';
 
 export class DeletePatientCommand {
   constructor(public readonly id: string) {}
@@ -11,15 +11,23 @@ export class DeletePatientCommand {
 export class DeletePatientHandler
   implements ICommandHandler<DeletePatientCommand>
 {
-  constructor(private readonly patientRepository: PatientRepository) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async execute(command: DeletePatientCommand): Promise<void> {
-    const patient = await this.patientRepository.findById(command.id);
+    const patient = await this.prisma.patient.findUnique({
+      where: { id: command.id },
+    });
 
     if (!patient) {
       throw new NotFoundException(`Patient with ID ${command.id} not found`);
     }
 
-    await this.patientRepository.delete(command.id);
+    try {
+      await this.prisma.patient.delete({
+        where: { id: command.id },
+      });
+    } catch (error) {
+      throw new Error(`Failed to delete patient with ID ${command.id}`);
+    }
   }
 }

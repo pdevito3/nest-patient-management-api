@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { PatientDto } from '../dtos';
 import { PatientMapper } from '../patient.mapper';
-import { PatientRepository } from '../patient.repository';
+import { PrismaService } from '../../prisma/prisma.service';
 
 export class GetAllPatientsQuery {
   constructor() {}
@@ -14,12 +14,12 @@ export class GetAllPatientsHandler
   implements IQueryHandler<GetAllPatientsQuery>
 {
   constructor(
-    private readonly patientRepository: PatientRepository,
+    private readonly prisma: PrismaService,
     private readonly patientMapper: PatientMapper,
   ) {}
 
   async execute(query: GetAllPatientsQuery): Promise<PatientDto[]> {
-    const patients = await this.patientRepository.findAll();
+    const patients = await this.prisma.patient.findMany();
     return patients.map((patient) => this.patientMapper.mapToDto(patient));
   }
 }

@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { VersioningType } from '@nestjs/common';
-import { ProblemDetailsConfigService } from './common/problem-details/problem-details-config.service';
-import { NotFoundExceptionFilter } from './common/problem-details/not-found.filter';
+import { ProblemDetailsConfigService } from './modules/shared/problem-details/problem-details-config.service';
+import { NotFoundExceptionFilter } from './modules/shared/problem-details/not-found.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {

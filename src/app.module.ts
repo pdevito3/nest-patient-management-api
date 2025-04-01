@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
-import { PatientsModule } from './domain/patients/patients.module';
-import { PrismaModule } from './prisma/prisma.module';
-import { ProblemDetailsModule } from './common/problem-details/problem-details.module';
+import { PatientsModule } from './modules/patients/patients.module';
+import { PrismaModule } from './modules/prisma/prisma.module';
+import { ProblemDetailsModule } from './modules/shared/problem-details/problem-details.module';
 
 @Module({
   imports: [
